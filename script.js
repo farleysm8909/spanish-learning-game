@@ -5,7 +5,7 @@ canvas.height = 700;
 let req;
 
 let duck = new Image();
-duck.src = 'duck.png';
+duck.src = 'images/duck.png';
 let x = 0;
 let y = 0;
 let w = 50;
