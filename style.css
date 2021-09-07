@@ -1,3 +1,7 @@
-h1 {
-  color: blue;  
+body {
+  text-align: center;
+}
+
+#word {
+  color: #aa151b;
 }

@@ -5,12 +5,13 @@ let s_words = ["comer", "feliz", "marisposa"];
 
 let rand = Math.floor(Math.random()*e_words.length);
 e_word.innerHTML = e_words[rand];
+let once = false;
 
 
 let canvas = document.getElementById('canvas');
 let cx = canvas.getContext('2d');
-canvas.width = 1200;
-canvas.height = 700;
+canvas.width = 1100;
+canvas.height = 650;
 let req;
 
 let duck = new Image();
@@ -28,10 +29,7 @@ let platforms = [];
 platforms.push({x: 0, y: 150, w: 100, h: 10, color: "#aa151b"});
 platforms.push({x: 150, y: 100, w: 150, h: 10, color: "#f1bf00"});
 platforms.push({x: 350, y: 250, w: 100, h: 10, color: "#f1bf00"});
-platforms.push({x: 550, y: 650, w: 100, h: 10, color: "#aa151b"});
-platforms.push({x: 100, y: 650, w: 200, h: 10, color: "#f1bf00"});
 platforms.push({x: 300, y: 450, w: 100, h: 10, color: "#aa151b"});
-
 platforms.push({x: 400, y: 150, w: 150, h: 10, color: "#f1bf00"});
 platforms.push({x: 700, y: 150, w: 100, h: 10, color: "#aa151b"});
 platforms.push({x: 750, y: 450, w: 100, h: 10, color: "#f1bf00"});
@@ -85,6 +83,19 @@ function platform() {
     });
 }
 
+function falling_words() {
+    while (once == false) {
+        s_words.forEach(function(s_word) {
+            // setTimeout(function() {
+                cx.font = "50px Arial";
+                cx.fillText(s_word, Math.random()*canvas.width, 150);
+                // make s_words fall somehow
+            // }, 1000);
+        });
+        once = true;
+    }
+}
+
 function animate() {
     req = requestAnimationFrame(animate);
     cx.clearRect(0, 0, canvas.width, canvas.height);
@@ -93,6 +104,7 @@ function animate() {
     y += ysp + pull;
     move();
     platform();
+    falling_words();
 }
 
 animate();
