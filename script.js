@@ -5,8 +5,6 @@ let s_words = ["comer", "feliz", "marisposa"];
 
 let rand = Math.floor(Math.random()*e_words.length);
 e_word.innerHTML = e_words[rand];
-let once = false;
-
 
 let canvas = document.getElementById('canvas');
 let cx = canvas.getContext('2d');
@@ -83,17 +81,23 @@ function platform() {
     });
 }
 
-function falling_words() {
-    while (once == false) {
-        s_words.forEach(function(s_word) {
-            // setTimeout(function() {
-                cx.font = "50px Arial";
-                cx.fillText(s_word, Math.random()*canvas.width, 150);
-                // make s_words fall somehow
-            // }, 1000);
-        });
-        once = true;
-    }
+function placing_words() {
+    let s1 = Math.floor(Math.random()*s_words.length);
+    let s2 = Math.floor(Math.random()*s_words.length);
+    let s3 = Math.floor(Math.random()*s_words.length);
+    let mult_choice = [];
+    mult_choice.push(s1);
+    mult_choice.push(s2);
+    mult_choice.push(s3);
+
+    let p1 = Math.floor(Math.random()*platforms.length);
+    let p2 = Math.floor(Math.random()*platforms.length);
+    let p3 = Math.floor(Math.random()*platforms.length);
+
+    mult_choice.forEach(function(sw) {
+        cx.font = "50px Arial";
+        cx.fillText(s_word, platforms[p3].x, platforms[p3].y + 40);
+    });
 }
 
 function animate() {
@@ -104,7 +108,7 @@ function animate() {
     y += ysp + pull;
     move();
     platform();
-    falling_words();
+    placing_words();
 }
 
 animate();
