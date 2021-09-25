@@ -82,22 +82,49 @@ function platform() {
 }
 
 function placing_words() {
-    let s1 = Math.floor(Math.random()*s_words.length);
-    let s2 = Math.floor(Math.random()*s_words.length);
-    let s3 = Math.floor(Math.random()*s_words.length);
-    let mult_choice = [];
-    mult_choice.push(s1);
-    mult_choice.push(s2);
-    mult_choice.push(s3);
-
+    // 3 random spanish words (index)
+    // let option1 = Math.floor(Math.random()*s_words.length);
+    // let option2 = Math.floor(Math.random()*s_words.length);
+    // let option3 = Math.floor(Math.random()*s_words.length);
+    // 3 random platforms (index)
     let p1 = Math.floor(Math.random()*platforms.length);
     let p2 = Math.floor(Math.random()*platforms.length);
     let p3 = Math.floor(Math.random()*platforms.length);
 
-    mult_choice.forEach(function(sw) {
+    //let mult_choice = [];
+    let chosen_plats = [];
+    // remove duplicate spanish words
+    // while (option1 == option2 || option1 == option3 || option2 == option3) {
+    //     if (option1 == option2) {
+    //         option2 = Math.floor(Math.random()*s_words.length);
+    //     } else if (option1 == option3) {
+    //         option3 = Math.floor(Math.random()*s_words.length);
+    //     } else { //option2 = option3
+    //         option3 = Math.floor(Math.random()*s_words.length);
+    //     }
+    // }
+    // mult_choice.push(option1);
+    // mult_choice.push(option2);
+    // mult_choice.push(option3);
+    // remove duplicate platforms
+    while (p1 == p2 || p1 == p3 || p2 == p3) {
+        if (p1 == p2) {
+            let p2 = Math.floor(Math.random()*platforms.length);
+        } else if (p1 == p3) {
+            let p3 = Math.floor(Math.random()*platforms.length);
+        } else { // p2 = p3
+            let p3 = Math.floor(Math.random()*platforms.length);
+        }
+    }
+    chosen_plats.push(p1);
+    chosen_plats.push(p2);
+    chosen_plats.push(p3);
+
+    for (let i = 0; i < chosen_plats.length; i++) {
+        cx.fillStyle = platforms[chosen_plats[i]];
         cx.font = "50px Arial";
-        cx.fillText(s_word, platforms[p3].x, platforms[p3].y + 40);
-    });
+        cx.fillText(s_words[i], platforms[chosen_plats[i]].x, platforms[chosen_plats[i]].y - 30);
+    }
 }
 
 function animate() {
