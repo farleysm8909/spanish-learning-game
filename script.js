@@ -1,7 +1,7 @@
 let e_word = document.getElementById("word");
 
-let e_words = ["eat", "happy", "butterfly", "family", "brother", "sister"];
-let s_words = ["comer", "feliz", "marisposa", "familia", "hermano", "hermana"];
+let e_words = ["eat", "happy", "butterfly", "family", "brother", "sister", "mother", "father", "dog", "cat", "cow", "red", "blue", "green", "yellow", "tree"];
+let s_words = ["comer", "feliz", "marisposa", "familia", "hermano", "hermana", "madre", "padre", "perro", "gato", "vaca", "rojo", "azul", "verde", "amarillo", "árbol"];
 
 let rand;
 
@@ -102,13 +102,21 @@ function generateWords() {
     let p1 = Math.floor(Math.random()*platforms.length);
     let p2 = Math.floor(Math.random()*platforms.length);
     let p3 = Math.floor(Math.random()*platforms.length);
+    let p4 = Math.floor(Math.random()*platforms.length);
     chosen_plats.push(p1);
     chosen_plats.push(p2);
     chosen_plats.push(p3);
+    chosen_plats.push(p4);
     // remove duplicate platforms
     chosen_plats = [...new Set(chosen_plats)];
+    for (let i = 0; i < chosen_plats.length; i++) {
+        // if chosen platform for spanish word to be generated above is the one where the player is already standing, remove it
+        if (platforms[chosen_plats[i]].x < x+w && platforms[chosen_plats[i]].x+platforms[chosen_plats[i]].w > x && y < platforms[chosen_plats[i]].y && y+h > platforms[chosen_plats[i]].y-150) {
+            chosen_plats.splice(i, 1);
+        }
+    }
 
-    while (mult_choice.length < chosen_plats.length) {
+    while (mult_choice.length < chosen_plats.length || chosen_plats.length == 4) {
         chosen_plats.length--;
     }
 }
@@ -131,7 +139,6 @@ function placing_words() {
         cx.fillText(s_words[mult_choice[i]], platforms[chosen_plats[i]].x, platforms[chosen_plats[i]].y - 20);
         if (s_words[mult_choice[i]] == s_words[rand]) {
             correct_plat = platforms[chosen_plats[i]];
-            //alert("index of chosen plat: " + chosen_plats[i]);
         }
     }
 }
@@ -180,7 +187,7 @@ function lava() {
 function animate() {
     req = requestAnimationFrame(animate);
     cx.clearRect(0, 0, canvas.width, canvas.height);
-    cx.drawImage(img_bk, 0, 0, canvas.width, canvas.height-50);
+    //cx.drawImage(img_bk, 0, 0, canvas.width, canvas.height-50);
     cx.drawImage(duck, x, y, w, h);
     x += xsp;
     y += ysp + pull;
