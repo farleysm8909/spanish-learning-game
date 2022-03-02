@@ -1,0 +1,12 @@
+TODO:
+- add capability of adding a new platform wherever player currently is
+- add capability to delete most recently-added platform
+- rainbow platforms?
+- implement levels:
+    * level 1: foods
+    * level 2: nature
+    * level 3: family
+    * etc...
+- new bkgd for each level?
+- score increases by an extra 5 for each level?
+- ability to shoot at the words instead of just colliding to achieve the correct answer?

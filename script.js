@@ -49,10 +49,10 @@ let score = 0;
 
 let lava_y = 600;
 let img_lava = new Image();
-img_lava.src = "images/lava.jpg";
+img_lava.src = "images/sewer.jpg";
 
 let img_bk = new Image();
-img_bk.src = "images/wetland.jpg";
+img_bk.src = "images/rainbow.jpg";
 
 document.addEventListener("keydown", (e) => {
     e.preventDefault();
@@ -72,7 +72,8 @@ function move() {
         ysp = 0;
     } else {
         for (let i = 0; i < keys.length; i++) {
-            if ((keys[i] == "ArrowUp" || keys[i] == "Space") && pull == 0) {
+            // if the user presses the up arrow or the spacebar and they are on a platform, jump
+            if ((keys[i] == "ArrowUp" || keys[i] == " ") && pull == 0) {
                 y -= 150;
             }
             if (keys[i] == "ArrowLeft") {
@@ -85,20 +86,23 @@ function move() {
 }
 
 function generateWords() {
+    // generate random index to pick next english word
     rand = Math.floor(Math.random()*e_words.length);
     e_word.innerHTML = e_words[rand];
-    // 3 random spanish words (index)
+    // 3 random spanish words (their indeces)
     let option1 = Math.floor(Math.random()*s_words.length);
     let option2 = Math.floor(Math.random()*s_words.length);
     let option3 = Math.floor(Math.random()*s_words.length);
-    mult_choice.push(rand);
-    mult_choice.push(option1);
+    // 1 correct answer
+    mult_choice.push(rand); 
+    // 3 random incorrect answers
+    mult_choice.push(option1); 
     mult_choice.push(option2);
-    mult_choice.push(option3);
-    // remove duplicate spanish words
+    mult_choice.push(option3); 
+    // remove duplicate spanish words (indeces)
     mult_choice = [...new Set(mult_choice)];
 
-    // 3 random platforms (index)
+    // 4 random platforms (their indeces)
     let p1 = Math.floor(Math.random()*platforms.length);
     let p2 = Math.floor(Math.random()*platforms.length);
     let p3 = Math.floor(Math.random()*platforms.length);
@@ -111,12 +115,17 @@ function generateWords() {
     chosen_plats = [...new Set(chosen_plats)];
     for (let i = 0; i < chosen_plats.length; i++) {
         // if chosen platform for spanish word to be generated above is the one where the player is already standing, remove it
-        if (platforms[chosen_plats[i]].x < x+w && platforms[chosen_plats[i]].x+platforms[chosen_plats[i]].w > x && y < platforms[chosen_plats[i]].y && y+h > platforms[chosen_plats[i]].y-150) {
+        if (platforms[chosen_plats[i]].x < x+w && 
+            platforms[chosen_plats[i]].x+platforms[chosen_plats[i]].w > x && 
+            y < platforms[chosen_plats[i]].y && y+h > platforms[chosen_plats[i]].y-150) {
             chosen_plats.splice(i, 1);
         }
     }
 
-    while (mult_choice.length < chosen_plats.length || chosen_plats.length == 4) {
+    // ensure that each chosen platform gets a multiple choice word
+    // or statement ensures there are, at most, 3 multiple choice options (started with 4 because of likelihood of duplicates)
+    // ^ works per placing_words() for loop
+    while (mult_choice.length < chosen_plats.length || chosen_plats.length === 4) {
         chosen_plats.length--;
     }
 }
@@ -136,7 +145,9 @@ function placing_words() {
     for (let i = 0; i < chosen_plats.length; i++) {
         cx.fillStyle = "#000000";
         cx.font = "40px Arial";
+        // print the multiple choice spanish words to the canvas (on platforms)
         cx.fillText(s_words[mult_choice[i]], platforms[chosen_plats[i]].x, platforms[chosen_plats[i]].y - 20);
+        // flag the platform where the correct answer resides
         if (s_words[mult_choice[i]] == s_words[rand]) {
             correct_plat = platforms[chosen_plats[i]];
         }
@@ -162,13 +173,19 @@ function checkCollision() {
 function printScore() {
     cx.fillStyle = "#000000";
     cx.font = "30px Arial";
-    cx.fillText("Score: " + score, 0, 50);
+    cx.fillText("Score: " + score, canvas.width/2-60, 50);
 }
 
 function gameOver() {
+    cx.fillStyle = "#FFFFFF";
+    cx.fillRect(canvas.width/4, canvas.height/4, canvas.width/2, canvas.height/2);
+    cx.drawImage(duck, canvas.width/3+w, canvas.height/3+h, canvas.width/4, canvas.height/4);
     cx.fillStyle = "#000000";
     cx.font = "60px Arial";
-    cx.fillText("Game Over!", 390, 50);
+    cx.textAlign = "center";
+    cx.fillText("Game Over!", canvas.width/2, 2/5*canvas.height);
+    cx.font = "30px Arial";
+    cx.fillText("Score: " + score, canvas.width/2, 13/18*canvas.height)
     if (req) {
         cancelAnimationFrame(req);
         req = undefined;
@@ -187,7 +204,7 @@ function lava() {
 function animate() {
     req = requestAnimationFrame(animate);
     cx.clearRect(0, 0, canvas.width, canvas.height);
-    //cx.drawImage(img_bk, 0, 0, canvas.width, canvas.height-50);
+    cx.drawImage(img_bk, 0, 0, canvas.width, canvas.height-50);
     cx.drawImage(duck, x, y, w, h);
     x += xsp;
     y += ysp + pull;
